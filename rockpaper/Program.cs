@@ -1,5 +1,7 @@
 ﻿using NBitcoin;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -11,11 +13,24 @@ namespace rockpaper
         {        
             if (args.Length < 3)
             {
-                throw new ArgumentException("Arguments must be more than 3");
+                Console.WriteLine("--------Arguments must be more than 3--------");
+                Environment.Exit(0);
             }
             if (args.Length % 2 == 0)
             {
-                throw new ArgumentException("The number of arguments must be odd");
+                Console.WriteLine("--------The number of arguments must be odd--------");
+                Environment.Exit(0);
+            }
+            for (int i = 0; i < args.Length; i++)
+            {
+                for (int j = i; j < args.Length; j++)
+                {
+                    if (args[i] == args[j] && j != i)
+                    {
+                        Console.WriteLine("--------There must be no duplicate arguments--------");
+                        Environment.Exit(0);
+                    }
+                }
             }
 
             Console.WriteLine("Availavle moves:");
@@ -33,10 +48,7 @@ namespace rockpaper
                 byte[] HMACKey = Hash.GenerateKey();
                 byte[] HMAC = Hash.GenerateHMAC(args, computerMove, HMACKey);
                 Console.Write("HMAC: ");
-                foreach (var d in HMAC)
-                {
-                    Console.Write($"{d:X2}");
-                }
+                Print256(HMAC);
                 Console.WriteLine("");
                 Console.Write("Enter value: ");
                 string answer = Console.ReadLine();              
@@ -51,22 +63,27 @@ namespace rockpaper
                 else
                 {
                     int answerNumber;
-                    if (!Int32.TryParse(answer, out answerNumber))
+                    if (!Int32.TryParse(answer, out answerNumber) || answerNumber > args.Length)
                     {
-                        Console.WriteLine("Wrong symbol");
+                        Console.WriteLine("--------Wrong argument--------");
                         continue;
-                    }                 
+                    }
                     Console.WriteLine("Your move: " + args[answerNumber - 1]);
                     Console.WriteLine($"Computer move: {args[computerMove]}");
                     Console.WriteLine(GameRules.StartGame(args, answerNumber - 1, computerMove));
-                    foreach (var d in HMACKey)
-                    {
-                        Console.Write($"{d:X2}");
-                    }
+                    Console.Write("Key: ");
+                    Print256(HMACKey);
                     Console.WriteLine("\n");
                 }
+            }                       
+        }
+
+        public static void Print256(byte[] shaaLg)
+        {
+            foreach (var d in shaaLg)
+            {
+                Console.Write($"{d:X2}");
             }
-            
         }
         
     }

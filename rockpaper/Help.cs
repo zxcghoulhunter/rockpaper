@@ -23,7 +23,7 @@ namespace rockpaper
                 for (int j = 1; j <= args.Length; j++)
                 {
                     
-                    column[j] = GameRules.StartGame(args, i, j - 1);
+                    column[j] = GameRules.StartGame(args, i, j - 1).ToUpper();
                     if (!(column[j].Length == 4))
                     {
                         column[j] = column[j].Substring(4, column[j].Length - 4);

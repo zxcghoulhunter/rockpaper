@@ -14,7 +14,7 @@ namespace rockpaper
         public static int GenerateComputerMove(string[] args)
         {
             Random rnd = new Random();
-            int computerMove = rnd.Next(0, args.Length - 1);
+            int computerMove = rnd.Next(0, args.Length);
             return computerMove;
 
         }
